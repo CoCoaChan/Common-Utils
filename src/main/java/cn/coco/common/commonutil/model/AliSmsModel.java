@@ -42,7 +42,7 @@ public class AliSmsModel {
      */
     private String templateParam;
     /**
-     * T上行短信扩展码
+     * 上行短信扩展码
      */
     private String smsUpExtendCode;
     /**
