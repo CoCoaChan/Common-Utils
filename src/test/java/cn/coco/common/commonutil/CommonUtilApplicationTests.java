@@ -22,7 +22,7 @@ class CommonUtilApplicationTests {
     void testCrawlerSimple() {
         CrawlerUtil crawlerUtil = new CrawlerUtil();
         String targetUrl = "https://yurinavi.com/yuri-calendar/";
-        List<String> parseResult = crawlerUtil.listTagContent(targetUrl, "tr td");
+        List<String> parseResult = crawlerUtil.listTagContent(targetUrl, ".column-3");
         for (String s : parseResult) {
             System.out.println(s);
         }
