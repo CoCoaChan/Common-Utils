@@ -39,6 +39,13 @@ public class CrawlerUtil {
     CloseableHttpClient httpClient = null;
     CloseableHttpResponse response = null;
 
+    /**
+     * 无差分爬下整个网页
+     *
+     * @param url ;
+     * @return ;
+     * @throws IOException ;
+     */
     public String parseHtmlContent(String url) throws IOException {
         try {
             // 创建httpclient实例
@@ -57,6 +64,48 @@ public class CrawlerUtil {
         }
     }
 
+
+    /**
+     * 获取指定标签文本链接内容
+     *
+     * @param url             ;
+     * @param searchCondition ;
+     * @return ;
+     * @throws IOException ;
+     */
+    public List<String> listTagLink(String url, String searchCondition) throws IOException {
+        list = new ArrayList<>();
+        try {
+            // 创建HttpClient实例
+            httpClient = HttpClients.createDefault();
+            // 创建 HttpGet 实例
+            HttpGet httpGet = new HttpGet(url);
+            // 执行get请求
+            response = httpClient.execute(httpGet);
+//        if (response.getStatusLine().getStatusCode() == 200) {
+            HttpEntity httpEntity = response.getEntity();
+            // 获取返回实体
+            String content = EntityUtils.toString(httpEntity, "utf8");
+            // 解析网页 得到文档对象
+            Document document = Jsoup.parse(content);
+            // 获取指定的标签
+            Elements elements = document.select(searchCondition);
+            for (Element element : elements) {
+                // 获取链接信息
+                log.info(element.attr("src"));
+                if (!"".equals(element.attr("src"))) {
+                    list.add(element.attr("src"));
+                }
+            }
+            return list;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            response.close();
+            httpClient.close();
+        }
+    }
 
     /**
      * 获取指定标签文本内容
@@ -84,41 +133,6 @@ public class CrawlerUtil {
             // 获取指定的标签
             Elements elements = document.select(searchCondition);
             for (Element element : elements) {
-                log.info(element.attr("src"));
-                if (!"".equals(element.attr("src"))) {
-                    list.add(element.attr("src"));
-                }
-            }
-            return list;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            response.close();
-            httpClient.close();
-        }
-    }
-
-
-    public List<String> listTagLink(String url, String searchCondition) throws IOException {
-        list = new ArrayList<>();
-        try {
-            // 创建HttpClient实例
-            httpClient = HttpClients.createDefault();
-            // 创建 HttpGet 实例
-            HttpGet httpGet = new HttpGet(url);
-            // 执行get请求
-            response = httpClient.execute(httpGet);
-//        if (response.getStatusLine().getStatusCode() == 200) {
-            HttpEntity httpEntity = response.getEntity();
-            // 获取返回实体
-            String content = EntityUtils.toString(httpEntity, "utf8");
-            // 解析网页 得到文档对象
-            Document document = Jsoup.parse(content);
-            // 获取指定的标签
-            Elements elements = document.select(searchCondition);
-            for (Element element : elements) {
-                log.info(element.text());
                 if (!"".equals(element.text())) {
                     list.add(element.text());
                 }
