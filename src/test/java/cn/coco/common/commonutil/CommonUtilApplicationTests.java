@@ -12,11 +12,6 @@ import java.util.List;
 @SpringBootTest
 class CommonUtilApplicationTests {
 
-    @Test
-    void contextLoads() {
-
-    }
-
     @SneakyThrows
     @Test
     void testCrawlerSimple() {
